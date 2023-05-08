@@ -1,0 +1,12 @@
+version: '3'
+
+services:
+
+  postgres:
+    image: postgres:11
+    env_file: ./.env
+    ports:
+      - 15434:5432
+#    volumes:
+#      - ./db:/var/lib/postgresql/data
+    command: 'postgres -N 500'

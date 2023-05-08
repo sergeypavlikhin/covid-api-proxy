@@ -1,0 +1,18 @@
+app:
+  request-delay-ms: 1618
+  cooling-time-sec: 10
+  cooling-time-multiplier: 1.318
+  cooling-time-max: 300
+  external-source-url: 'https://api.covid19api.com'
+  datasource:
+    jdbc-url: 'jdbc:postgresql://localhost:15434/postgres'
+    username: 'covidapi'
+    password: 'covidapi888815173__covidapi__162b1knx888'
+
+
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: ${app.datasource.jdbc-url}
+    username: ${app.datasource.username}
+    password: ${app.datasource.password}
