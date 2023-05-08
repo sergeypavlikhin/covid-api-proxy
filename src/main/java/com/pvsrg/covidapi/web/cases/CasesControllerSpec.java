@@ -1,6 +1,5 @@
 package com.pvsrg.covidapi.web.cases;
 
-import com.pvsrg.covidapi.web.cases.dto.MaxMinCasesResponseDTO;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,7 +14,7 @@ import java.util.List;
 public interface CasesControllerSpec {
 
     @GetMapping("/max-min-stats")
-    ResponseEntity<MaxMinCasesResponseDTO> findMaxMinCasesByPeriod(
+    ResponseEntity<?> findMaxMinCasesByPeriod(
             @RequestParam(name = "countries") List<Long> countries,
             @RequestParam("from") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fromDate,
             @RequestParam("to") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate toDate
