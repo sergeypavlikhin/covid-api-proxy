@@ -17,8 +17,8 @@ public class CovidapiApplication {
 	}
 
 	@Bean
-	public CommandLineRunner commandLineRunner(CountryPullingService pullingService,
-											   CasesPullingService casesPullingService) {
+	public CommandLineRunner initialPulling(CountryPullingService pullingService,
+											CasesPullingService casesPullingService) {
 		return args -> {
 			pullingService.pullCountries();
 			casesPullingService.pullCases();

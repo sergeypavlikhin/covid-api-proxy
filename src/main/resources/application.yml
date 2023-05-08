@@ -1,4 +1,5 @@
 app:
+  pulling-cron: '0 0 12 * * ?'
   request-delay-ms: 1618
   cooling-time-sec: 10
   cooling-time-multiplier: 1.318

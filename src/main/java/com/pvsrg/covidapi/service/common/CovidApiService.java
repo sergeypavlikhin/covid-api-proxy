@@ -22,11 +22,11 @@ public class CovidApiService {
     private final AppProperties appProperties;
 
     public List<CACountryDTO> fetchCountries() throws Exception {
-        return wrapCallable(apiClient::fetchCountries);
+        return wrapApiCalling(apiClient::fetchCountries);
     }
 
-    public List<CACasesDataDTO> fetchCases(String countryId) throws Exception {
-        return wrapCallable(() -> apiClient.fetchCases(countryId));
+    public List<CACasesDataDTO> fetchCases(String countrySlug) throws Exception {
+        return wrapApiCalling(() -> apiClient.fetchCases(countrySlug));
     }
 
     /**
@@ -37,7 +37,7 @@ public class CovidApiService {
      * @return T
      * @throws Exception
      */
-    protected <T> T wrapCallable(Callable<T> callable) throws Exception {
+    protected <T> T wrapApiCalling(Callable<T> callable) throws Exception {
         // before each request make some delay
         safeSleepMs(appProperties.requestDelayMs());
 
