@@ -1,6 +1,6 @@
 package com.pvsrg.covidapi.web.cases.mapper;
 
-import com.pvsrg.covidapi.model.entities.MaxMinCasesVO;
+import com.pvsrg.covidapi.model.vo.MaxMinCasesVO;
 import com.pvsrg.covidapi.web.cases.dto.MaxMinCasesResponseDTO;
 import org.mapstruct.Mapper;
 

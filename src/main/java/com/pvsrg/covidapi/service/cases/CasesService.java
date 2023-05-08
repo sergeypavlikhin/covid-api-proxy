@@ -1,7 +1,7 @@
 package com.pvsrg.covidapi.service.cases;
 
-import com.pvsrg.covidapi.model.entities.MaxMinCasesVO;
-import com.pvsrg.covidapi.service.DaoService;
+import com.pvsrg.covidapi.model.vo.MaxMinCasesVO;
+import com.pvsrg.covidapi.service.cases.dao.CasesDAO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -12,13 +12,13 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CasesService {
 
-    private final DaoService daoService;
+    private final CasesDAO casesDAO;
 
     public MaxMinCasesVO findMaxMin(List<Long> countryIds, LocalDate from, LocalDate to) {
-        return daoService.findCases(countryIds, from, to);
+        return casesDAO.findCases(countryIds, from, to);
     }
 
     public void insert(Long countryId, LocalDate date, Integer newCases) {
-        daoService.insertCase(countryId, date, newCases);
+        casesDAO.insertCase(countryId, date, newCases);
     }
 }
