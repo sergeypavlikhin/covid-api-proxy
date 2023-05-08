@@ -9,6 +9,7 @@ import com.pvsrg.covidapi.es.covidapi.exception.CATooManyRequestsException;
 import com.pvsrg.covidapi.properties.AppProperties;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +17,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
-import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 
@@ -26,48 +26,26 @@ import java.util.List;
 public class CovidAPIClientImpl implements CovidAPIClient {
 
     private final RestTemplate restTemplate;
-    private final ObjectMapper objectMapper;
     private final AppProperties appProperties;
 
     @Override
     public List<CACountryDTO> fetchCountries() throws CAException {
-        try {
-            var url = "%s/countries".formatted(appProperties.externalSourceURL());
-
-            ResponseEntity<String> response = this.callAPI(url);
-
-            if (response.getStatusCode().is2xxSuccessful()) {
-                return objectMapper.readValue(response.getBody(), new TypeReference<List<CACountryDTO>>() {
-                });
-            } else {
-                log.error("External source responsed with error: {}, {}", response.getStatusCode(), response.getBody());
-            }
-
-        } catch (Exception e) {
-            throw new CAException(e);
-        }
-
-        return Collections.emptyList();
+        var url = "%s/countries".formatted(appProperties.externalSourceURL());
+        return this.callAPI(url, new ParameterizedTypeReference<List<CACountryDTO>>() {
+        });
     }
 
     @Override
-    public List<CACasesDataDTO> fetchCases(String countrySlug, LocalDate from, LocalDate to) throws CAException {
+    public List<CACasesDataDTO> fetchCases(String countrySlug) throws CAException {
+        var url = "%s/total/dayone/country/%s/status/confirmed".formatted(appProperties.externalSourceURL(), countrySlug);
+        return this.callAPI(url, new ParameterizedTypeReference<List<CACasesDataDTO>>() {
+        });
+    }
+
+    private <T> T callAPI(String url, ParameterizedTypeReference<T> typeReference) throws CAException {
         try {
-            var url = "%s/total/dayone/country/%s/status/confirmed".formatted(appProperties.externalSourceURL(), countrySlug);
-
-            ResponseEntity<String> response = this.callAPI(url);
-
-            if (response.getStatusCode().is2xxSuccessful()) {
-                return objectMapper.readValue(response.getBody(), new TypeReference<List<CACasesDataDTO>>() {
-                });
-            } else if (response.getStatusCode().value() == 429) {
-                throw new CATooManyRequestsException();
-            } else {
-                log.error("External source responsed with error: {}, {}", response.getStatusCode(), response.getBody());
-            }
-
-        } catch (CAException e) {
-            throw e;
+            ResponseEntity<T> response = restTemplate.exchange(url, HttpMethod.GET, null, typeReference);
+            return response.getBody();
         } catch (HttpClientErrorException e) {
             if (e.getStatusCode().equals(HttpStatus.TOO_MANY_REQUESTS)) {
                 throw new CATooManyRequestsException();
@@ -76,12 +54,6 @@ public class CovidAPIClientImpl implements CovidAPIClient {
         }  catch (Exception e) {
             throw new CAException(e);
         }
-
-        return Collections.emptyList();
-    }
-
-    private ResponseEntity<String> callAPI(String url) {
-        return restTemplate.exchange(url, HttpMethod.GET, null, String.class);
     }
 
 }
