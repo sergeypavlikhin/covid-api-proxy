@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.time.LocalDate;
 import java.util.List;
 
+// TODO Swagger here
 @RequestMapping("/api/v1/cases")
 public interface CasesControllerSpec {
 

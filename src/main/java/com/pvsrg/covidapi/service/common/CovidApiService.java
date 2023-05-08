@@ -3,12 +3,10 @@ package com.pvsrg.covidapi.service.common;
 import com.pvsrg.covidapi.es.covidapi.CovidAPIClient;
 import com.pvsrg.covidapi.es.covidapi.dto.CACasesDataDTO;
 import com.pvsrg.covidapi.es.covidapi.dto.CACountryDTO;
-import com.pvsrg.covidapi.es.covidapi.exception.CAException;
 import com.pvsrg.covidapi.es.covidapi.exception.CATooManyRequestsException;
 import com.pvsrg.covidapi.properties.AppProperties;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -31,6 +29,14 @@ public class CovidApiService {
         return wrapCallable(() -> apiClient.fetchCases(countryId));
     }
 
+    /**
+     * Wrap method execution with logic how to deal with service limits
+     *
+     * @param callable method execution
+     * @param <T>      result type
+     * @return T
+     * @throws Exception
+     */
     protected <T> T wrapCallable(Callable<T> callable) throws Exception {
         // before each request make some delay
         safeSleepMs(appProperties.requestDelayMs());

@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
 
+// TODO Swagger here
 @RequestMapping("/api/v1/countries")
 public interface CountryControllerSpec {
 

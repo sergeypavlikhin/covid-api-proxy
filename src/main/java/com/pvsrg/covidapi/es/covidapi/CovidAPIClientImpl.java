@@ -1,7 +1,5 @@
 package com.pvsrg.covidapi.es.covidapi;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pvsrg.covidapi.es.covidapi.dto.CACasesDataDTO;
 import com.pvsrg.covidapi.es.covidapi.dto.CACountryDTO;
 import com.pvsrg.covidapi.es.covidapi.exception.CAException;
@@ -17,7 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -51,7 +48,7 @@ public class CovidAPIClientImpl implements CovidAPIClient {
                 throw new CATooManyRequestsException();
             }
             throw new CAException(e);
-        }  catch (Exception e) {
+        } catch (Exception e) {
             throw new CAException(e);
         }
     }
